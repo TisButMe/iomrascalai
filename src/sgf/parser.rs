@@ -21,6 +21,7 @@
 
 use std::io::fs::File;
 
+use board;
 use board::Black;
 use board::Color;
 use board::Empty;
@@ -81,7 +82,7 @@ impl<'a> Property<'a> {
         }
     }
 
-    fn play(&self, game: Game) -> Result<Game, IllegalMove> {
+    fn play(&self, game: Game) -> Result<Game, board::IllegalMove> {
         if self.is_move() {
             if self.is_pass() {
                 game.play(Pass(self.color()))
