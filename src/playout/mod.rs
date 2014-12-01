@@ -25,7 +25,7 @@ use game::Game;
 
 mod test;
 
-pub struct Playout<'a, E> {
+pub struct Playout<'a, E:'a> {
     engine: &'a E
 }
 
