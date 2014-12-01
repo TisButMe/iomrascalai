@@ -24,10 +24,9 @@ use std::io::fs::File;
 use board::Black;
 use board::Color;
 use board::Empty;
-use board::IllegalMove;
 use board::White;
-use board::move::Pass;
-use board::move::Play;
+use board::gomove::Pass;
+use board::gomove::Play;
 use game::Game;
 use ruleset::Minimal;
 

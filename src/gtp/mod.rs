@@ -21,7 +21,7 @@
 
 
 use board::Color;
-use board::move::Move;
+use board::gomove::Move;
 use engine::Engine;
 use game::Game;
 use ruleset::KgsChinese;
@@ -136,26 +136,26 @@ impl<'a> GTPInterpreter<'a > {
             },
             "genmove"          => {
                 let color = Color::from_gtp(command[1]);
-                let move  = self.engine.gen_move(color, &self.game);
-                match self.game.clone().play(move) {
+                let m  = self.engine.gen_move(color, &self.game);
+                match self.game.clone().play(m) {
                     Ok(g) => {
                         self.game = g;
-                        GenMove(move.to_gtp())
+                        GenMove(m.to_gtp())
                     },
                     Err(_) => {
-                        GenMoveError(move)
+                        GenMoveError(m)
                     }
                 }
             },
             "play"             => {
-                let move = Move::from_gtp(command[1], command[2]);
-                match self.game.clone().play(move) {
+                let m = Move::from_gtp(command[1], command[2]);
+                match self.game.clone().play(m) {
                     Ok(g) => {
                         self.game = g;
                         Play
                     },
                     Err(_) => {
-                        PlayError(move)
+                        PlayError(m)
                     }
                 }
             },

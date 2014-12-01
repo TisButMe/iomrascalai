@@ -78,12 +78,12 @@ impl Engine for McEngine {
     fn gen_move(&self, color: Color, game: &Game) -> Move {
         let mut stats = HashMap::new();
         let moves = game.legal_moves();
-        for move in moves.iter() {
+        for m in moves.iter() {
             for i in range(0u, 1) {
                 let playout = Playout::new(&self.randomEngine);
-                let g = game.play(*move).unwrap();
+                let g = game.play(*m).unwrap();
                 let winner = playout.run(g);
-                let mut prev_move_stats = stats.find_or_insert(move, MoveStats::new());
+                let mut prev_move_stats = stats.find_or_insert(m, MoveStats::new());
                 if winner == color {
                     prev_move_stats.won();
                 } else {
@@ -93,18 +93,18 @@ impl Engine for McEngine {
         }
         // pass if 0% wins
         // pass if 100% wins
-        if stats.iter().all(|(move, move_stats)| move_stats.all_wins() || move_stats.all_loses()) {
+        if stats.iter().all(|(m, move_stats)| move_stats.all_wins() || move_stats.all_loses()) {
             Pass(color)
         } else {
-            let mut move = Pass(color);
+            let mut mo = Pass(color);
             let mut move_stats = MoveStats::new();
             for (m, ms) in stats.iter() {
                 if ms.win_ratio() > move_stats.win_ratio() {
-                    move = **m;
+                    mo = **m;
                     move_stats = *ms;
                 }
             }
-            move
+            mo
         }
     }
 
