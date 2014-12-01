@@ -27,7 +27,7 @@ use super::Engine;
 use engine::RandomEngine;
 use playout::Playout;
 
-use std::collections::hashmap::HashMap;
+use std::collections::hashmap::{HashMap, Vacant, Occupied};
 
 mod test;
 
@@ -64,12 +64,12 @@ impl MoveStats {
 }
 
 pub struct McEngine {
-    randomEngine: RandomEngine
+    random_engine: RandomEngine
 }
 
 impl McEngine {
     pub fn new() -> McEngine {
-        McEngine{randomEngine: RandomEngine::new()}
+        McEngine{random_engine: RandomEngine::new()}
     }
 
 }
@@ -80,10 +80,13 @@ impl Engine for McEngine {
         let moves = game.legal_moves();
         for m in moves.iter() {
             for i in range(0u, 1) {
-                let playout = Playout::new(&self.randomEngine);
+                let playout = Playout::new(&self.random_engine);
                 let g = game.play(*m).unwrap();
                 let winner = playout.run(g);
-                let mut prev_move_stats = stats.find_or_insert(m, MoveStats::new());
+                let prev_move_stats = match stats.entry(m) {
+                    Vacant(entry) => entry.set(MoveStats::new()),
+                    Occupied(entry) => entry.into_mut()
+                };
                 if winner == color {
                     prev_move_stats.won();
                 } else {
@@ -93,7 +96,7 @@ impl Engine for McEngine {
         }
         // pass if 0% wins
         // pass if 100% wins
-        if stats.iter().all(|(m, move_stats)| move_stats.all_wins() || move_stats.all_loses()) {
+        if stats.iter().all(|(_, move_stats)| move_stats.all_wins() || move_stats.all_loses()) {
             Pass(color)
         } else {
             let mut mo = Pass(color);

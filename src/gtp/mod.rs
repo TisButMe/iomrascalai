@@ -180,7 +180,7 @@ impl<'a> GTPInterpreter<'a > {
 
         // We convert HT to SPACE (ASCII 9 to ASCII 32)
         unsafe {
-            out = out.as_bytes().iter().fold(String::new(), |mut s, &b| if b == 9 {s.push_byte(32); s} else {s.push_byte(b); s});
+            out = out.as_bytes().iter().fold(String::new(), |mut s, &b| if b == 9 {s.as_mut_vec().push(32); s} else {s.as_mut_vec().push(b); s});
         }
 
         // We remove the whitespaces before/after the string
@@ -196,7 +196,7 @@ impl<'a> GTPInterpreter<'a > {
             result.push_str(c.as_slice());
             result.push_str("\n");
         }
-        result.pop_char();
+        result.pop();
         result
     }
 }

@@ -52,6 +52,6 @@ impl Chain {
     pub fn show(&self) -> String {
         self.coords
             .iter()
-            .fold(format!("{:<3}| {:5}, libs: {:2}, stones: ", self.id, self.color, self.libs), |s, c| s.append(format!(" {},{} |", c.col, c.row).as_slice()))
+            .fold(format!("{:<3}| {:5}, libs: {:2}, stones: ", self.id, self.color, self.libs), |mut s, c| {s.push_str(format!(" {},{} |", c.col, c.row).as_slice()); s})
     }
 }

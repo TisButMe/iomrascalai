@@ -344,7 +344,7 @@ impl<'a> Board<'a> {
         let coords_to_remove = m.coords().neighbours(self.size).iter()
                                       .map(|&coord| self.get_chain(coord))
                                       .filter(|chain| chain.libs == 0 && chain.color != m.color())
-                                      .fold(Vec::new(), |acc, chain| acc.append(chain.coords().as_slice()));
+                                      .fold(Vec::new(), |mut acc, chain| {acc.push_all(chain.coords().as_slice()); acc});
 
 
         let mut chain_to_remove_ids: Vec<uint> = m.coords().neighbours(self.size)
@@ -428,7 +428,7 @@ impl<'a> Board<'a> {
                 Empty => () // This territory is not enclosed by a single color
             }
 
-            empty_intersections = empty_intersections.move_iter().filter(|coord| !territory.coords().contains(coord)).collect();
+            empty_intersections = empty_intersections.into_iter().filter(|coord| !territory.coords().contains(coord)).collect();
         }
 
         (black_score, white_score)
