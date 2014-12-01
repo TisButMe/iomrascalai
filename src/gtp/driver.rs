@@ -38,11 +38,11 @@ use super::Quit;
 use super::ShowBoard;
 use super::Version;
 
-pub struct Driver {
-    engine: Box<Engine>
+pub struct Driver<'a> {
+    engine: Box<Engine +'a>
 }
 
-impl Driver {
+impl<'a> Driver<'a> {
     pub fn new(engine: Box<Engine>) {
         let engine_name = "Iomrascálaí";
         let engine_version = "0.1.0";
