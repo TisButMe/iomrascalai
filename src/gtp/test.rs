@@ -71,8 +71,8 @@ fn sets_the_komi() {
 fn sets_the_time() {
     let mut interpreter = GTPInterpreter::new(Box::new(RandomEngine::new()));
     interpreter.read("time_settings 30 20 10\n");
-    assert_eq!(30, interpreter.main_time());
-    assert_eq!(20, interpreter.byo_time());
+    assert_eq!(30_000, interpreter.main_time());
+    assert_eq!(20_000, interpreter.byo_time());
     assert_eq!(10, interpreter.byo_stones());
 }
 
